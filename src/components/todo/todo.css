@@ -1,0 +1,96 @@
+:root {
+  --color-bg-dark: #051956;
+  --color-bg-medium: #1e293b;
+  --color-bg-card: #334155;
+  --color-bg-task-completed: #475569;
+
+  --color-accent-purple: #a855f7;
+  --color-accent-pink: #ec4899;
+
+  --color-text-light: #f8fafc;
+  --color-text-faded: #94a3b8;
+  --color-border-subtle: #475569;
+}
+
+body {
+  background-color: #3451a1;
+  background: #020024;
+  background: linear-gradient(
+    135deg,
+    #1b092d 5%,
+    #483b6d 50%,
+    #483b6d 50%,
+    #483b6d 66%,
+    #152270 98%
+  );
+}
+html {
+  min-height: 100dvh;
+}
+
+.todo-section {
+  background-color: #3c5aadbb;
+}
+
+.status {
+  background-color: #051956;
+}
+
+.add-form {
+  background-color: #051956 !important;
+  color: white !important;
+}
+input::placeholder {
+  color: white;
+}
+
+textarea::placeholder {
+  color: white;
+}
+
+.form-control {
+  color: white;
+  background-color: transparent;
+}
+
+.form-control:focus {
+  color: white;
+  background-color: transparent;
+  border-color: #0d6efd;
+}
+
+hr {
+  margin: 1px;
+}
+
+.form-control,
+.form-select {
+  background-color: var(--bg-light) !important;
+
+  color: white !important;
+}
+
+.form-control::placeholder {
+  color: #adb5bd !important;
+  opacity: 0.8;
+}
+
+.form-control:focus {
+  background-color: var(--bg-dark) !important;
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+form {
+  background-color: #051956;
+}
+
+.todo-card {
+  transition: transform 0.2s ease-in-out;
+}
+.todo-card:hover {
+  transform: translateY(-5px);
+}
+
+option:hover{
+  color: red !important;
+}

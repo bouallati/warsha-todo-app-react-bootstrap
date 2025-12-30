@@ -1,0 +1,175 @@
+npx create-react-app my-app
+npm create vite@latest
+npm i bootstrap-icons
+
+npm install react-bootstrap bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+
+src/
+├─ components/
+│   ├─ index.jsx
+│   └─ todo/
+│       ├─ useTodo.jsx
+│       ├─ todoData.js
+│       ├─ index.jsx
+│       ├─ Todo.jsx
+│       ├─ Header.jsx
+│       ├─ Footer.jsx
+│       ├─ Form.jsx
+│       ├─ Stats.jsx
+│       └─ TodoList.jsx  ← الملف الذي تعرض فيه العناصر على شكل Card/Table
+├─ app.jsx
+
+
+
+barrel:
+// todo/index.jsx
+export { default as Todo } from "./Todo";
+export { default as Header } from "./Header";
+export { default as Footer } from "./Footer";
+export { default as Form } from "./Form";
+export { default as Stats } from "./Stats";
+export { default as TodoList } from "./TodoList";
+
+export { useTodo } from "./useTodo";
+export * from "./todoData";
+
+
+import { Todo, Header, Form, useTodo, todoData } from "./components/todo";
+
+
+
+src/
+├─ app.jsx                 ← نقطة الدخول الرئيسية للتطبيق
+│
+├─ components/             ← كل المكونات والميزات
+│   ├─ index.jsx           ← Barrel File لجميع الميزات داخل components
+│   │                        (export * from "./todo";)
+│   │
+│   └─ todo/               ← Feature: Todo
+│       ├─ index.jsx       ← Barrel File لمكونات Todo
+│       │                        (export UI + hooks + data)
+│       │
+│       ├─ useTodo.jsx     ← Logic (Hook) لإدارة state والوظائف
+│       ├─ todoData.js     ← Logic (بيانات وهمية)
+│       │
+│       ├─ Todo.jsx        ← UI (مكوّن رئيسي للـ Todo)
+│       ├─ Header.jsx      ← UI (عنوان التطبيق)
+│       ├─ Footer.jsx      ← UI (تذييل)
+│       ├─ Form.jsx        ← UI (إضافة مهمة جديدة)
+│       ├─ Stats.jsx       ← UI (عرض إحصائيات)
+│       └─ TodoList.jsx    ← UI (عرض كل المهام على شكل Card/Table)
+
+
+
+                    +----------------+
+                    |  useTodo Hook  |   <-- Logic (State + Functions)
+                    |----------------|
+                    | todos          |
+                    | addTodo()      |
+                    | changeStatus() |
+                    +--------+-------+
+                             |
+          ------------------------------------------------
+          |                  |                          |
+      +---v---+          +---v---+                  +---v---+
+      | Form  |          | TodoList |               | Stats |
+      | UI    |          | UI       |               | UI    |
+      +---+---+          +---+---+                  +---+---+
+          |                  |                          |
+   onAdd(todo)           todos & onChangeStatus        todos (read-only)
+          |                  |
+          |                  |
+          |           +------v-------+
+          |           |   Todo       |
+          |           |   UI         |
+          |           +------+-------+
+          |                  |
+          |           onChangeStatus(todo.id)
+          |                  |
+          +------------------>|
+                             (calls changeStatus() in useTodo)
+
+
+الشرح خطوة خطوة
+
+useTodo Hook (Logic)
+
+يحتفظ بـ todos في state
+
+يوفر Functions مثل addTodo() و changeStatus()
+
+Form (UI)
+
+المستخدم يكتب عنوان المهمة
+
+عند الضغط على Add → يستدعي onAdd(todo) → addTodo() في useTodo
+
+TodoList (UI)
+
+يستقبل todos من useTodo
+
+يعرض كل عنصر باستخدام Todo.jsx
+
+Todo (UI)
+
+لكل مهمة زر لتغيير الحالة
+
+عند الضغط → يستدعي onChangeStatus(id) → Function في useTodo
+
+useTodo تحدث الـ state → UI يُعاد عرضها تلقائيًا
+
+Stats (UI)
+
+يستقبل todos ويحسب إحصائيات مثل عدد المهام في كل حالة
+
+مجرد قراءة → لا يغير state
+
+✅ ملاحظات مهمة
+
+UI يستقبل فقط Props → لا يدير state رئيسي
+
+Logic يدير البيانات → لا يعرف شيئًا عن طريقة عرضها
+
+تغيير حالة Todo يتم عبر changeStatus() في Hook
+
+Barrel Files (index.jsx) تسهل استيراد كل هذه المكونات في app.jsx
+
+
+
+                    +------------------------+
+                    |  useTodo Hook (Logic)  |  ← الأخضر
+                    |------------------------|
+                    | todos (state)         |
+                    | addTodo()             |
+                    | changeStatus()        |
+                    +-----------+------------+
+                                |
+       -------------------------------------------------------------
+       |                         |                                |
+   +---v---+                 +---v---+                        +---v---+
+   | Form  |                 | TodoList |                      | Stats |
+   | UI    | ← الأزرق        | UI       | ← الأزرق             | UI    | ← الأزرق
+   +---+---+                 +---+---+                        +---+---+
+       |                          |                                |
+   onAdd(todo)                 todos & onChangeStatus             todos (read-only)
+       |                          |
+       |                  +-------v--------+
+       |                  |   Todo (UI)    | ← الأزرق
+       |                  +-------+--------+
+       |                          |
+       |                  onChangeStatus(todo.id)
+       |                          |
+       +-------------------------->|
+                                  (calls changeStatus() in useTodo)
+
+
+App.jsx
+ └─ TodoList (UI)   ← يستقبل todos & onChangeStatus
+     └─ Todo (UI)   ← يستقبل todo & onChangeStatus
+         └─ زر "Next Status" يستدعي onChangeStatus(todo.id)
+
+
+
